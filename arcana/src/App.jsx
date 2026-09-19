@@ -61,7 +61,12 @@ function App() {
     }
 
     if (pagina === 'dashboard') {
-      return <Dashboard voltarInicio={() => setPagina('inicio')} />
+      return (
+        <Dashboard
+          voltarInicio={() => setPagina('inicio')}
+          abrirPerfil={() => setPagina('perfil')}
+        />
+      )
     }
 
     return (
@@ -71,6 +76,10 @@ function App() {
           <h1>ARCANA</h1>
           <p>Bem-vindo ao sistema!</p>
         </div>
+
+        <button onClick={() => setPagina('dashboard')}>
+          Dashboard
+        </button>
 
         <button onClick={() => setPagina('perfil')}>
           Meu Perfil
