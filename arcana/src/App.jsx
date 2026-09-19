@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import './App.css'
 import Cadastro from './Cadastro'
+import Recuperacao from './Recuperacao'
+import Perfil from './Perfil'
+import Dashboard from './Dashboard'
 
 function App() {
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [pagina, setPagina] = useState('login')
+  const [logado, setLogado] = useState(false)
 
   const emailCorreto = 'teste@teste.com'
   const senhaCorreta = '123456'
@@ -30,15 +34,62 @@ function App() {
     }
 
     if (email === emailCorreto && senha === senhaCorreta) {
-      alert('Login realizado com sucesso!')
+      setLogado(true)
+      setPagina('inicio')
     } else {
       alert('E-mail ou senha incorretos.')
     }
 
   }
 
+  function sair() {
+    setLogado(false)
+    setEmail('')
+    setSenha('')
+  }
+
+  if (logado) {
+
+    if (pagina === 'perfil') {
+      return (
+        <Perfil
+          voltarInicio={() => setPagina('inicio')}
+          nome="Roger Santos"
+          email={email}
+        />
+      )
+    }
+
+    if (pagina === 'dashboard') {
+      return <Dashboard voltarInicio={() => setPagina('inicio')} />
+    }
+
+    return (
+      <main className="login">
+
+        <div className="login-header">
+          <h1>ARCANA</h1>
+          <p>Bem-vindo ao sistema!</p>
+        </div>
+
+        <button onClick={() => setPagina('perfil')}>
+          Meu Perfil
+        </button>
+
+        <button onClick={sair}>
+          Sair
+        </button>
+
+      </main>
+    )
+  }
+
   if (pagina === 'cadastro') {
     return <Cadastro voltarLogin={() => setPagina('login')} />
+  }
+
+  if (pagina === 'recuperacao') {
+    return <Recuperacao voltarLogin={() => setPagina('login')} />
   }
 
   return (
@@ -82,7 +133,12 @@ function App() {
       </form>
 
       <div className="login-links">
-        <a href="#">Esqueci minha senha</a>
+        <a href="#" onClick={(event) => {
+          event.preventDefault()
+          setPagina('recuperacao')
+        }}>
+          Esqueci minha senha
+        </a>
         <a href="#" onClick={(event) => {
           event.preventDefault()
           setPagina('cadastro')
