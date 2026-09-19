@@ -12,7 +12,7 @@ function Perfil({ voltarInicio, nome, email }) {
                 <p><strong>E-mail:</strong> {email}</p>
             </div>
 
-            <button onClick={voltarInicio}>
+            <button className="botao-voltar" onClick={voltarInicio}>
                 Voltar
             </button>
 

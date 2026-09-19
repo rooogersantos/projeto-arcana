@@ -7,12 +7,12 @@ function Conta({ voltarInicio }) {
                 <p>Minha conta</p>
             </div>
 
-            <div className="form-group">
+            <div className="info-card">
                 <p><strong>Status:</strong> Ativa</p>
                 <p><strong>Tipo:</strong> Usuário</p>
             </div>
 
-            <button onClick={voltarInicio}>
+            <button className="botao-voltar" onClick={voltarInicio}>
                 Voltar
             </button>
 

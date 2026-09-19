@@ -7,12 +7,12 @@ function Status({ voltarInicio }) {
                 <p>Status da conta</p>
             </div>
 
-            <div className="form-group">
+            <div className="info-card">
                 <p><strong>Status:</strong> Conectado</p>
                 <p><strong>Sistema:</strong> Operacional</p>
             </div>
 
-            <button onClick={voltarInicio}>
+            <button className="botao-voltar" onClick={voltarInicio}>
                 Voltar
             </button>
 
