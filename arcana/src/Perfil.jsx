@@ -7,7 +7,7 @@ function Perfil({ voltarInicio, nome, email }) {
                 <p>Meu perfil</p>
             </div>
 
-            <div className="form-group">
+            <div className="info-card">
                 <p><strong>Nome:</strong> {nome}</p>
                 <p><strong>E-mail:</strong> {email}</p>
             </div>

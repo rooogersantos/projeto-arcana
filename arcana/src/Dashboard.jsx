@@ -1,4 +1,12 @@
-function Dashboard({ voltarInicio, abrirPerfil, abrirConta, abrirStatus, usuario }) {
+function Dashboard({
+    abrirPerfil,
+    abrirConta,
+    abrirStatus,
+    usuario,
+    usuarios,
+    removerUsuario,
+    sair
+}) {
 
     return (
         <main className="login">
@@ -8,7 +16,7 @@ function Dashboard({ voltarInicio, abrirPerfil, abrirConta, abrirStatus, usuario
                 <p>Dashboard</p>
             </div>
 
-            
+            <p>Bem-vindo(a), {usuario.nome}!</p>
 
             <div className="dashboard-cards">
 
@@ -38,8 +46,35 @@ function Dashboard({ voltarInicio, abrirPerfil, abrirConta, abrirStatus, usuario
 
             </div>
 
-            <button onClick={voltarInicio}>
-                Voltar
+            {usuario.tipo === 'admin' && (
+                <>
+                    <p>Total de usuários cadastrados: {usuarios.length}</p>
+
+                    <div className="usuarios-lista">
+                        <h2>Usuários cadastrados</h2>
+
+                        {usuarios.map((usuarioLista) => (
+                            <div key={usuarioLista.id}>
+                                <p>
+                                    {usuarioLista.nome} — {usuarioLista.email}
+                                </p>
+
+                                {usuarioLista.id !== usuario.id && (
+                                    <button
+                                        className="botao-excluir"
+                                        onClick={() => removerUsuario(usuarioLista.id)}
+                                    >
+                                        Excluir
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
+
+            <button className="botao-sair" onClick={sair}>
+                Sair
             </button>
 
         </main>

@@ -16,23 +16,27 @@ function App() {
   const [usuarioLogado, setUsuarioLogado] = useState(null)
 
   const [usuarios, setUsuarios] = useState(() => {
-    const usuariosSalvos = localStorage.getItem('usuarios')
+    const usuariosSalvos = localStorage.getItem('usuarios_novo')
 
     if (usuariosSalvos) {
-      return JSON.parse(usuariosSalvos)
+      const usuarios = JSON.parse(usuariosSalvos)
+
+      return usuarios.map((usuario) => ({
+        ...usuario,
+        tipo: usuario.email === 'admin@teste.com' ? 'admin' : 'usuario'
+      }))
     }
 
     return [
       {
+        id: 1,
         nome: 'Roger Santos',
-        email: 'teste@teste.com',
-        senha: '123456'
+        email: 'admin@teste.com',
+        senha: '123456',
+        tipo: 'admin'
       }
     ]
   })
-
-  const emailCorreto = 'teste@teste.com'
-  const senhaCorreta = '123456'
 
   function entrar(event) {
     event.preventDefault()
@@ -59,7 +63,7 @@ function App() {
     if (usuarioEncontrado) {
       setUsuarioLogado(usuarioEncontrado)
       setLogado(true)
-      setPagina('inicio')
+      setPagina('dashboard')
     }
 
   }
@@ -71,12 +75,27 @@ function App() {
     setSenha('')
   }
 
+  function removerUsuario(id) {
+
+    if (usuarioLogado.tipo !== 'admin') {
+      return
+    }
+
+    const novosUsuarios = usuarios.filter(
+      (usuario) => usuario.id !== id
+    )
+
+    setUsuarios(novosUsuarios)
+
+    localStorage.setItem('usuarios_novo', JSON.stringify(novosUsuarios))
+  }
+
   if (logado) {
 
     if (pagina === 'perfil') {
       return (
         <Perfil
-          voltarInicio={() => setPagina('inicio')}
+          voltarInicio={() => setPagina('dashboard')}
           nome={usuarioLogado.nome}
           email={usuarioLogado.email}
         />
@@ -86,7 +105,7 @@ function App() {
     if (pagina === 'conta') {
       return (
         <Conta
-          voltarInicio={() => setPagina('inicio')}
+          voltarInicio={() => setPagina('dashboard')}
         />
       )
     }
@@ -94,7 +113,7 @@ function App() {
     if (pagina === 'status') {
       return (
         <Status
-          voltarInicio={() => setPagina('inicio')}
+          voltarInicio={() => setPagina('dashboard')}
         />
       )
     }
@@ -102,37 +121,17 @@ function App() {
     if (pagina === 'dashboard') {
       return (
         <Dashboard
-          voltarInicio={() => setPagina('inicio')}
           abrirPerfil={() => setPagina('perfil')}
           abrirConta={() => setPagina('conta')}
           abrirStatus={() => setPagina('status')}
           usuario={usuarioLogado}
+          usuarios={usuarios}
+          removerUsuario={removerUsuario}
+          sair={sair}
         />
       )
     }
 
-    return (
-      <main className="login">
-
-        <div className="login-header">
-          <h1>ARCANA</h1>
-          <p>Bem-vindo ao sistema!</p>
-        </div>
-
-        <button onClick={() => setPagina('dashboard')}>
-          Dashboard
-        </button>
-
-        <button onClick={() => setPagina('perfil')}>
-          Meu Perfil
-        </button>
-
-        <button onClick={sair}>
-          Sair
-        </button>
-
-      </main>
-    )
   }
 
   if (pagina === 'cadastro') {
@@ -140,8 +139,13 @@ function App() {
       <Cadastro
         voltarLogin={() => setPagina('login')}
         adicionarUsuario={(novoUsuario) => {
-          setUsuarios([...usuarios, novoUsuario])
+          const novosUsuarios = [...usuarios, novoUsuario]
+
+          setUsuarios(novosUsuarios)
+
+          localStorage.setItem('usuarios_novo', JSON.stringify(novosUsuarios))
         }}
+        usuarios={usuarios}
       />
     )
   }
@@ -188,22 +192,22 @@ function App() {
           Entrar
         </button>
 
-      </form>
+        <div className="login-links">
+          <a href="#" onClick={(event) => {
+            event.preventDefault()
+            setPagina('recuperacao')
+          }}>
+            Esqueci minha senha
+          </a>
+          <a href="#" onClick={(event) => {
+            event.preventDefault()
+            setPagina('cadastro')
+          }}>
+            Criar uma conta
+          </a>
+        </div>
 
-      <div className="login-links">
-        <a href="#" onClick={(event) => {
-          event.preventDefault()
-          setPagina('recuperacao')
-        }}>
-          Esqueci minha senha
-        </a>
-        <a href="#" onClick={(event) => {
-          event.preventDefault()
-          setPagina('cadastro')
-        }}>
-          Criar uma conta
-        </a>
-      </div>
+      </form>
 
     </main>
   )

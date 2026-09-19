@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Cadastro({ voltarLogin, adicionarUsuario }) {
+function Cadastro({ voltarLogin, adicionarUsuario, usuarios }) {
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
@@ -23,10 +23,21 @@ function Cadastro({ voltarLogin, adicionarUsuario }) {
           return
       }
 
+      const emailExiste = usuarios.some(
+        (usuario) => usuario.email === email
+      )
+
+      if (emailExiste) {
+        alert('Este e-mail já está cadastrado.')
+        return
+      }
+
       adicionarUsuario({
+        id: Date.now(),
         nome: nome,
         email: email,
-        senha: senha
+        senha: senha,
+        tipo: 'usuario'
       })
 
       alert('Conta criada com sucesso!')
