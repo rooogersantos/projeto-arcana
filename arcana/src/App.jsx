@@ -4,6 +4,8 @@ import Cadastro from './Cadastro'
 import Recuperacao from './Recuperacao'
 import Perfil from './Perfil'
 import Dashboard from './Dashboard'
+import Conta from './Conta'
+import Status from './Status'
 
 function App() {
 
@@ -11,6 +13,23 @@ function App() {
   const [senha, setSenha] = useState('')
   const [pagina, setPagina] = useState('login')
   const [logado, setLogado] = useState(false)
+  const [usuarioLogado, setUsuarioLogado] = useState(null)
+
+  const [usuarios, setUsuarios] = useState(() => {
+    const usuariosSalvos = localStorage.getItem('usuarios')
+
+    if (usuariosSalvos) {
+      return JSON.parse(usuariosSalvos)
+    }
+
+    return [
+      {
+        nome: 'Roger Santos',
+        email: 'teste@teste.com',
+        senha: '123456'
+      }
+    ]
+  })
 
   const emailCorreto = 'teste@teste.com'
   const senhaCorreta = '123456'
@@ -33,17 +52,21 @@ function App() {
       return
     }
 
-    if (email === emailCorreto && senha === senhaCorreta) {
+    const usuarioEncontrado = usuarios.find(
+      (usuario) => usuario.email === email && usuario.senha === senha
+    )
+
+    if (usuarioEncontrado) {
+      setUsuarioLogado(usuarioEncontrado)
       setLogado(true)
       setPagina('inicio')
-    } else {
-      alert('E-mail ou senha incorretos.')
     }
 
   }
 
   function sair() {
     setLogado(false)
+    setUsuarioLogado(null)
     setEmail('')
     setSenha('')
   }
@@ -54,8 +77,24 @@ function App() {
       return (
         <Perfil
           voltarInicio={() => setPagina('inicio')}
-          nome="Roger Santos"
-          email={email}
+          nome={usuarioLogado.nome}
+          email={usuarioLogado.email}
+        />
+      )
+    }
+
+    if (pagina === 'conta') {
+      return (
+        <Conta
+          voltarInicio={() => setPagina('inicio')}
+        />
+      )
+    }
+
+    if (pagina === 'status') {
+      return (
+        <Status
+          voltarInicio={() => setPagina('inicio')}
         />
       )
     }
@@ -65,6 +104,9 @@ function App() {
         <Dashboard
           voltarInicio={() => setPagina('inicio')}
           abrirPerfil={() => setPagina('perfil')}
+          abrirConta={() => setPagina('conta')}
+          abrirStatus={() => setPagina('status')}
+          usuario={usuarioLogado}
         />
       )
     }
@@ -94,7 +136,14 @@ function App() {
   }
 
   if (pagina === 'cadastro') {
-    return <Cadastro voltarLogin={() => setPagina('login')} />
+    return (
+      <Cadastro
+        voltarLogin={() => setPagina('login')}
+        adicionarUsuario={(novoUsuario) => {
+          setUsuarios([...usuarios, novoUsuario])
+        }}
+      />
+    )
   }
 
   if (pagina === 'recuperacao') {

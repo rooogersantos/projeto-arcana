@@ -1,29 +1,37 @@
 import { useState } from 'react'
 
-function Cadastro({ voltarLogin }) {
+function Cadastro({ voltarLogin, adicionarUsuario }) {
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
 
     function cadastrar(event) {
-        event.preventDefault()
+      event.preventDefault()
 
-        if (nome === '' || email === '' || senha === '') {
-            alert('Preencha todos os campos.')
-            return
-        }
+      if (nome === '' || email === '' || senha === '') {
+          alert('Preencha todos os campos.')
+          return
+      }
 
-        if (!email.includes('@')) {
-            alert('Digite um e-mail válido.')
-            return
-        }
+      if (!email.includes('@')) {
+          alert('Digite um e-mail válido.')
+          return
+      }
 
-        if (senha.length < 6) {
-            alert('A senha deve ter pelo menos 6 caracteres.')
-            return
-        }
+      if (senha.length < 6) {
+          alert('A senha deve ter pelo menos 6 caracteres.')
+          return
+      }
 
-        alert(`Nome: ${nome}\nE-mail: ${email}\nSenha: ${senha}`)
+      adicionarUsuario({
+        nome: nome,
+        email: email,
+        senha: senha
+      })
+
+      alert('Conta criada com sucesso!')
+
+      voltarLogin()
     }
 
   return (
