@@ -405,6 +405,28 @@ body {
     stroke-linejoin: round;
 }
 
+.usuarios-lista select {
+    height: 36px;
+    padding: 0 32px 0 12px;
+    border: 1px solid #6f4aad;
+    border-radius: 8px;
+    background-color: white;
+    color: #2d2338;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+}
+
+.usuarios-lista select:hover {
+    background-color: #f4f1fa;
+}
+
+.usuarios-lista select:focus {
+    border-color: #5f3d9e;
+    box-shadow: 0 0 0 2px rgba(111, 74, 173, 0.15);
+}
 
 @media (max-width: 700px) {
 

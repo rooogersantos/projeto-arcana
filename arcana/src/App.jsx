@@ -261,6 +261,55 @@ function App() {
     )
   }
 
+  function alterarDadosUsuario(novoNome, novoEmail) {
+    const emailExiste = usuarios.some(
+      (usuario) =>
+        usuario.email === novoEmail &&
+        usuario.id !== usuarioLogado.id
+    )
+
+    if (emailExiste) {
+      return {
+        sucesso: false,
+        mensagem: 'Este e-mail já está cadastrado.'
+      }
+    }
+
+    const usuariosAtualizados = usuarios.map((usuario) =>
+      usuario.id === usuarioLogado.id
+        ? {
+          ...usuario,
+          nome: novoNome,
+          email: novoEmail
+        }
+        : usuario
+    )
+
+    const usuarioAtualizado = {
+      ...usuarioLogado,
+      nome: novoNome,
+      email: novoEmail
+    }
+
+    setUsuarios(usuariosAtualizados)
+    setUsuarioLogado(usuarioAtualizado)
+
+    localStorage.setItem(
+      'usuarios_novo',
+      JSON.stringify(usuariosAtualizados)
+    )
+
+    localStorage.setItem(
+      'usuarioLogado',
+      JSON.stringify(usuarioAtualizado)
+    )
+
+    return {
+      sucesso: true,
+      mensagem: 'Dados alterados com sucesso!'
+    }
+  }
+
   function alterarSenhaUsuario(senhaAtual, novaSenha) {
     if (usuarioLogado.senha !== senhaAtual) {
       return {
@@ -300,7 +349,24 @@ function App() {
   }
 
   function removerUsuario(id) {
-    if (!usuarioLogado || usuarioLogado.tipo !== 'admin') {
+    if (!usuarioLogado) {
+      return
+    }
+
+    const usuarioParaRemover = usuarios.find(
+      (usuario) => usuario.id === id
+    )
+
+    if (!usuarioParaRemover) {
+      return
+    } if (usuarioParaRemover.id === usuarioLogado.id) {
+      return
+    } if (usuarioLogado.tipo === 'usuario') {
+      return
+    } if (
+      usuarioLogado.tipo === 'moderador' &&
+      usuarioParaRemover.tipo !== 'usuario'
+    ) {
       return
     }
 
@@ -314,6 +380,43 @@ function App() {
       'usuarios_novo',
       JSON.stringify(novosUsuarios)
     )
+  }
+
+  function alterarTipoUsuario(id, novoTipo) {
+    if (!usuarioLogado || usuarioLogado.tipo !== 'admin') {
+      return
+    }
+
+    if (id === usuarioLogado.id) {
+      return
+    }
+
+    const usuariosAtualizados = usuarios.map((usuario) =>
+      usuario.id === id
+        ? { ...usuario, tipo: novoTipo }
+        : usuario
+    )
+
+    setUsuarios(usuariosAtualizados)
+
+    localStorage.setItem(
+      'usuarios_novo',
+      JSON.stringify(usuariosAtualizados)
+    )
+
+    if (usuarioLogado.id === id) {
+      const usuarioAtualizado = {
+        ...usuarioLogado,
+        tipo: novoTipo
+      }
+
+      setUsuarioLogado(usuarioAtualizado)
+
+      localStorage.setItem(
+        'usuarioLogado',
+        JSON.stringify(usuarioAtualizado)
+      )
+    }
   }
 
   return (
@@ -389,6 +492,7 @@ function App() {
               usuario={usuarioLogado}
               usuarios={usuarios}
               removerUsuario={removerUsuario}
+              alterarTipoUsuario={alterarTipoUsuario}
               sair={sair}
             />
           ) : (
@@ -421,6 +525,9 @@ function App() {
             <Conta
               voltarInicio={() => navigate('/dashboard')}
               tipo={usuarioLogado.tipo}
+              nome={usuarioLogado.nome}
+              email={usuarioLogado.email}
+              alterarDadosUsuario={alterarDadosUsuario}
               alterarSenhaUsuario={alterarSenhaUsuario}
             />
           ) : (
@@ -435,6 +542,7 @@ function App() {
           logado && usuarioLogado ? (
             <Status
               voltarInicio={() => navigate('/dashboard')}
+              usuario={usuarioLogado}
             />
           ) : (
             <Navigate to="/login" replace />

@@ -1,6 +1,16 @@
 import { useState } from 'react'
 
-function Conta({ voltarInicio, tipo, alterarSenhaUsuario }) {
+function Conta({
+    voltarInicio,
+    tipo,
+    nome,
+    email,
+    alterarDadosUsuario,
+    alterarSenhaUsuario
+}) {
+    const [alterarDados, setAlterarDados] = useState(false)
+    const [novoNome, setNovoNome] = useState(nome)
+    const [novoEmail, setNovoEmail] = useState(email)
 
     const [alterarSenha, setAlterarSenha] = useState(false)
     const [senhaAtual, setSenhaAtual] = useState('')
@@ -11,8 +21,32 @@ function Conta({ voltarInicio, tipo, alterarSenhaUsuario }) {
     const [mostrarNovaSenha, setMostrarNovaSenha] = useState(false)
     const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false)
 
-    function salvarSenha() {
+    function salvarDados() {
+        if (novoNome.trim() === '' || novoEmail.trim() === '') {
+            alert('Preencha todos os campos.')
+            return
+        }
 
+        if (!novoEmail.includes('@')) {
+            alert('Digite um e-mail válido.')
+            return
+        }
+
+        const resultado = alterarDadosUsuario(
+            novoNome.trim(),
+            novoEmail.trim()
+        )
+
+        if (!resultado.sucesso) {
+            alert(resultado.mensagem)
+            return
+        }
+
+        alert(resultado.mensagem)
+        setAlterarDados(false)
+    }
+
+    function salvarSenha() {
         if (senhaAtual === '' || novaSenha === '' || confirmarSenha === '') {
             alert('Preencha todos os campos.')
             return
@@ -36,7 +70,6 @@ function Conta({ voltarInicio, tipo, alterarSenhaUsuario }) {
         }
 
         alert(resultado.mensagem)
-
         setSenhaAtual('')
         setNovaSenha('')
         setConfirmarSenha('')
@@ -51,18 +84,73 @@ function Conta({ voltarInicio, tipo, alterarSenhaUsuario }) {
                 <p>Minha conta</p>
             </div>
 
-            <div className="info-card">
-                <p><strong>Status:</strong> Ativa</p>
-                <p><strong>Tipo:</strong> {tipo === 'admin' ? 'Administrador' : 'Usuário'}</p>
-            </div>
+            {!alterarDados && (
+                <div className="info-card">
+                    <p><strong>Nome:</strong> {nome}</p>
+                    <p><strong>E-mail:</strong> {email}</p>
+                    <p><strong>Status:</strong> Ativa</p>
+                    <p>
+                        <strong>Tipo:</strong>{' '}
+                        {tipo === 'admin'
+                            ? 'Administrador'
+                            : tipo === 'moderador'
+                                ? 'Moderador'
+                                : 'Usuário'}
+                    </p>
+                </div>
+            )}
 
-            {!alterarSenha && (
-                <button
-                    className="botao-alterar-senha"
-                    onClick={() => setAlterarSenha(true)}
-                >
-                    Alterar senha
-                </button>
+            {alterarDados && (
+                <div className="info-card">
+
+                    <div className="form-group">
+                        <label htmlFor="novoNome">Nome</label>
+                        <input
+                            type="text"
+                            id="novoNome"
+                            placeholder="Digite seu nome"
+                            value={novoNome}
+                            onChange={(event) => setNovoNome(event.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="novoEmail">E-mail</label>
+                        <input
+                            type="email"
+                            id="novoEmail"
+                            placeholder="Digite seu e-mail"
+                            value={novoEmail}
+                            onChange={(event) => setNovoEmail(event.target.value)}
+                        />
+                    </div>
+
+                    <button
+                        className="botao-salvar-senha"
+                        onClick={salvarDados}
+                    >
+                        Salvar dados
+                    </button>
+
+                </div>
+            )}
+
+            {!alterarDados && !alterarSenha && (
+                <>
+                    <button
+                        className="botao-alterar-senha"
+                        onClick={() => setAlterarDados(true)}
+                    >
+                        Alterar dados
+                    </button>
+
+                    <button
+                        className="botao-alterar-senha"
+                        onClick={() => setAlterarSenha(true)}
+                    >
+                        Alterar senha
+                    </button>
+                </>
             )}
 
             {alterarSenha && (
@@ -159,7 +247,11 @@ function Conta({ voltarInicio, tipo, alterarSenhaUsuario }) {
             <button
                 className="botao-voltar"
                 onClick={() => {
-                    if (alterarSenha) {
+                    if (alterarDados) {
+                        setAlterarDados(false)
+                        setNovoNome(nome)
+                        setNovoEmail(email)
+                    } else if (alterarSenha) {
                         setAlterarSenha(false)
                         setSenhaAtual('')
                         setNovaSenha('')
