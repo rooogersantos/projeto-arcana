@@ -206,6 +206,34 @@ body {
     margin: 10px 0;
 }
 
+.foto-perfil {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.botao-foto {
+    display: inline-block;
+    padding: 9px 18px;
+    border-radius: 8px;
+    background-color: #6b4ca3;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-foto:hover {
+    background-color: #7d5bb5;
+}
+
+.botao-foto input {
+    display: none;
+}
+
 .botao-voltar {
     margin-top: 0;
     padding: 10px 24px;
@@ -219,6 +247,54 @@ body {
 }
 
 .botao-voltar:hover {
+    background-color: #7d5bb5;
+}
+
+.botao-salvar-foto {
+    margin-left: 5px;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 8px;
+    background-color: #6b4ca3;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-salvar-foto:hover {
+    background-color: #7d5bb5;
+}
+
+.botao-salvar-senha {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #6b4ca3;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-salvar-senha:hover {
+    background-color: #7d5bb5;
+}
+
+.botao-alterar-senha {
+    margin-bottom: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #6b4ca3;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-alterar-senha:hover {
     background-color: #7d5bb5;
 }
 

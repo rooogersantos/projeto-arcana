@@ -39,7 +39,8 @@ function App() {
         ...usuario,
         tipo: usuario.email === 'admin@teste.com'
           ? 'admin'
-          : (usuario.tipo || 'usuario')
+          : (usuario.tipo || 'usuario'),
+        foto: usuario.foto || ''
       }))
 
       localStorage.setItem(
@@ -88,6 +89,8 @@ function App() {
       localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado))
       setLogado(true)
       setPagina('dashboard')
+    } else {
+      alert('E-mail ou senha incorretos.')
     }
 
   }
@@ -98,6 +101,74 @@ function App() {
     setEmail('')
     setSenha('')
     localStorage.removeItem('usuarioLogado')
+  }
+
+  function alterarFoto(novaFoto) {
+
+    const usuariosAtualizados = usuarios.map((usuario) =>
+      usuario.id === usuarioLogado.id
+        ? { ...usuario, foto: novaFoto }
+        : usuario
+    )
+
+    setUsuarios(usuariosAtualizados)
+
+    setUsuarioLogado({
+      ...usuarioLogado,
+      foto: novaFoto
+    })
+
+    localStorage.setItem(
+      'usuarios_novo',
+      JSON.stringify(usuariosAtualizados)
+    )
+
+    localStorage.setItem(
+      'usuarioLogado',
+      JSON.stringify({
+        ...usuarioLogado,
+        foto: novaFoto
+      })
+    )
+  }
+
+  function alterarSenhaUsuario(senhaAtual, novaSenha) {
+
+    if (usuarioLogado.senha !== senhaAtual) {
+      return {
+        sucesso: false,
+        mensagem: 'A senha atual está incorreta.'
+      }
+    }
+
+    const usuariosAtualizados = usuarios.map((usuario) =>
+      usuario.id === usuarioLogado.id
+        ? { ...usuario, senha: novaSenha }
+        : usuario
+    )
+
+    const usuarioAtualizado = {
+      ...usuarioLogado,
+      senha: novaSenha
+    }
+
+    setUsuarios(usuariosAtualizados)
+    setUsuarioLogado(usuarioAtualizado)
+
+    localStorage.setItem(
+      'usuarios_novo',
+      JSON.stringify(usuariosAtualizados)
+    )
+
+    localStorage.setItem(
+      'usuarioLogado',
+      JSON.stringify(usuarioAtualizado)
+    )
+
+    return {
+      sucesso: true,
+      mensagem: 'Senha alterada com sucesso!'
+    }
   }
 
   function removerUsuario(id) {
@@ -123,6 +194,8 @@ function App() {
           voltarInicio={() => setPagina('dashboard')}
           nome={usuarioLogado.nome}
           email={usuarioLogado.email}
+          foto={usuarioLogado.foto}
+          alterarFoto={alterarFoto}
         />
       )
     }
@@ -132,6 +205,7 @@ function App() {
         <Conta
           voltarInicio={() => setPagina('dashboard')}
           tipo={usuarioLogado.tipo}
+          alterarSenhaUsuario={alterarSenhaUsuario}
         />
       )
     }
