@@ -92,16 +92,16 @@ function Cadastro({ voltarLogin, adicionarUsuario, usuarios }) {
           Criar conta
         </button>
 
-      </form>
+        <div className="login-links">
+          <a href="#" onClick={(event) => {
+            event.preventDefault()
+            voltarLogin()
+          }}>
+            Voltar para o login
+          </a>
+        </div>
 
-      <div className="login-links">
-        <a href="#" onClick={(event) => {
-          event.preventDefault()
-          voltarLogin()
-        }}>
-          Voltar para o login
-        </a>
-      </div>
+      </form>
 
     </main>
   )

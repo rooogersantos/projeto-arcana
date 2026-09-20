@@ -11,9 +11,23 @@ function App() {
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
-  const [pagina, setPagina] = useState('login')
-  const [logado, setLogado] = useState(false)
-  const [usuarioLogado, setUsuarioLogado] = useState(null)
+  const [pagina, setPagina] = useState(() => {
+    return localStorage.getItem('usuarioLogado') !== null
+      ? 'dashboard'
+      : 'login'
+  })
+  const [logado, setLogado] = useState(() => {
+    return localStorage.getItem('usuarioLogado') !== null
+  })
+  const [usuarioLogado, setUsuarioLogado] = useState(() => {
+    const usuarioSalvo = localStorage.getItem('usuarioLogado')
+
+    if (usuarioSalvo) {
+      return JSON.parse(usuarioSalvo)
+    }
+
+    return null
+  })
 
   const [usuarios, setUsuarios] = useState(() => {
     const usuariosSalvos = localStorage.getItem('usuarios_novo')
@@ -21,10 +35,19 @@ function App() {
     if (usuariosSalvos) {
       const usuarios = JSON.parse(usuariosSalvos)
 
-      return usuarios.map((usuario) => ({
+      const usuariosAtualizados = usuarios.map((usuario) => ({
         ...usuario,
-        tipo: usuario.email === 'admin@teste.com' ? 'admin' : 'usuario'
+        tipo: usuario.email === 'admin@teste.com'
+          ? 'admin'
+          : (usuario.tipo || 'usuario')
       }))
+
+      localStorage.setItem(
+        'usuarios_novo',
+        JSON.stringify(usuariosAtualizados)
+      )
+
+      return usuariosAtualizados
     }
 
     return [
@@ -62,6 +85,7 @@ function App() {
 
     if (usuarioEncontrado) {
       setUsuarioLogado(usuarioEncontrado)
+      localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado))
       setLogado(true)
       setPagina('dashboard')
     }
@@ -73,6 +97,7 @@ function App() {
     setUsuarioLogado(null)
     setEmail('')
     setSenha('')
+    localStorage.removeItem('usuarioLogado')
   }
 
   function removerUsuario(id) {
@@ -106,6 +131,7 @@ function App() {
       return (
         <Conta
           voltarInicio={() => setPagina('dashboard')}
+          tipo={usuarioLogado.tipo}
         />
       )
     }

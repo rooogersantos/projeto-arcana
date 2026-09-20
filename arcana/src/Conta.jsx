@@ -1,4 +1,4 @@
-function Conta({ voltarInicio }) {
+function Conta({ voltarInicio, tipo }) {
     return (
         <main className="login">
 
@@ -9,7 +9,7 @@ function Conta({ voltarInicio }) {
 
             <div className="info-card">
                 <p><strong>Status:</strong> Ativa</p>
-                <p><strong>Tipo:</strong> Usuário</p>
+                <p><strong>Tipo:</strong> {tipo === 'admin' ? 'Administrador' : 'Usuário'}</p>
             </div>
 
             <button className="botao-voltar" onClick={voltarInicio}>

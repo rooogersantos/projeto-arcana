@@ -64,7 +64,7 @@ body {
     display: flex;
     justify-content: space-between;
     font-size: 14px;
-    width: 320px;
+    width: 100%;
 }
 
 .login-header {
@@ -233,6 +233,18 @@ body {
     .usuarios-lista {
         width: calc(100% - 40px);
         max-width: 500px;
+    }
+
+    .login-links {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+    
+    .login-links a:last-child {
+        margin-left: auto;
+        text-align: right;
     }
 
 }
