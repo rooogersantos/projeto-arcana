@@ -206,6 +206,10 @@ body {
     margin: 10px 0;
 }
 
+.info-card .form-group+.form-group {
+    margin-top: 15px;
+}
+
 .foto-perfil {
     width: 160px;
     height: 160px;
@@ -298,6 +302,110 @@ body {
     background-color: #7d5bb5;
 }
 
+
+/* Campos de senha */
+
+.campo-senha {
+    position: relative;
+    width: 100%;
+}
+
+.campo-senha input {
+    width: 100%;
+    padding: 10px 40px 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.campo-senha input:focus {
+    outline: none;
+    border-color: #6b4ca3;
+    box-shadow: 0 0 0 3px rgba(107, 76, 163, 0.15);
+}
+
+
+/* Olho do Login */
+
+.login-form .campo-senha .botao-olho-login {
+    all: unset;
+
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #555;
+    cursor: pointer;
+}
+
+.login-form .campo-senha .botao-olho-login:hover {
+    background: transparent;
+    color: #333;
+}
+
+.login-form .campo-senha .botao-olho-login svg {
+    width: 20px;
+    height: 20px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* Olhos da Conta */
+
+.botao-olho {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 24px;
+    height: 24px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    background: transparent;
+    color: #555;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botao-olho:hover {
+    background: transparent;
+    color: #333;
+}
+
+.botao-olho svg {
+    width: 18px;
+    height: 18px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
 @media (max-width: 700px) {
 
     .dashboard-cards {
@@ -317,7 +425,7 @@ body {
         justify-content: space-between;
         box-sizing: border-box;
     }
-    
+
     .login-links a:last-child {
         margin-left: auto;
         text-align: right;

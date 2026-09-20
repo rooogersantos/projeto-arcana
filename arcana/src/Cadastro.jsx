@@ -1,49 +1,50 @@
 import { useState } from 'react'
 
 function Cadastro({ voltarLogin, adicionarUsuario, usuarios }) {
-    const [nome, setNome] = useState('')
-    const [email, setEmail] = useState('')
-    const [senha, setSenha] = useState('')
+  const [nome, setNome] = useState('')
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [mostrarSenha, setMostrarSenha] = useState(false)
 
-    function cadastrar(event) {
-      event.preventDefault()
+  function cadastrar(event) {
+    event.preventDefault()
 
-      if (nome === '' || email === '' || senha === '') {
-          alert('Preencha todos os campos.')
-          return
-      }
-
-      if (!email.includes('@')) {
-          alert('Digite um e-mail válido.')
-          return
-      }
-
-      if (senha.length < 6) {
-          alert('A senha deve ter pelo menos 6 caracteres.')
-          return
-      }
-
-      const emailExiste = usuarios.some(
-        (usuario) => usuario.email === email
-      )
-
-      if (emailExiste) {
-        alert('Este e-mail já está cadastrado.')
-        return
-      }
-
-      adicionarUsuario({
-        id: Date.now(),
-        nome: nome,
-        email: email,
-        senha: senha,
-        tipo: 'usuario'
-      })
-
-      alert('Conta criada com sucesso!')
-
-      voltarLogin()
+    if (nome === '' || email === '' || senha === '') {
+      alert('Preencha todos os campos.')
+      return
     }
+
+    if (!email.includes('@')) {
+      alert('Digite um e-mail válido.')
+      return
+    }
+
+    if (senha.length < 6) {
+      alert('A senha deve ter pelo menos 6 caracteres.')
+      return
+    }
+
+    const emailExiste = usuarios.some(
+      (usuario) => usuario.email === email
+    )
+
+    if (emailExiste) {
+      alert('Este e-mail já está cadastrado.')
+      return
+    }
+
+    adicionarUsuario({
+      id: Date.now(),
+      nome: nome,
+      email: email,
+      senha: senha,
+      tipo: 'usuario'
+    })
+
+    alert('Conta criada com sucesso!')
+
+    voltarLogin()
+  }
 
   return (
     <main className="login">
@@ -79,13 +80,32 @@ function Cadastro({ voltarLogin, adicionarUsuario, usuarios }) {
 
         <div className="form-group">
           <label htmlFor="senha">Senha</label>
-          <input
-            type="password"
-            id="senha"
-            placeholder="Digite sua senha"
-            value={senha}
-            onChange={(event) => setSenha(event.target.value)}
-          />
+
+          <div className="campo-senha">
+            <input
+              type={mostrarSenha ? 'text' : 'password'}
+              id="senha"
+              placeholder="Digite sua senha"
+              value={senha}
+              onChange={(event) => setSenha(event.target.value)}
+            />
+
+            <button
+              type="button"
+              className="botao-olho-login"
+              onClick={() => setMostrarSenha(!mostrarSenha)}
+              aria-label={
+                mostrarSenha
+                  ? 'Ocultar senha'
+                  : 'Mostrar senha'
+              }
+            >
+              <svg viewBox="0 0 24 24">
+                <path d="M2 12s3.5-5 10-5 10 5 10 5-3.5 5-10 5S2 12 2 12z" />
+                <circle cx="12" cy="12" r="2.5" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <button type="submit">
@@ -93,10 +113,13 @@ function Cadastro({ voltarLogin, adicionarUsuario, usuarios }) {
         </button>
 
         <div className="login-links">
-          <a href="#" onClick={(event) => {
-            event.preventDefault()
-            voltarLogin()
-          }}>
+          <a
+            href="#"
+            onClick={(event) => {
+              event.preventDefault()
+              voltarLogin()
+            }}
+          >
             Voltar para o login
           </a>
         </div>
