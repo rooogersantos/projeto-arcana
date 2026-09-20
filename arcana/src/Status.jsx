@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 function Status({ voltarInicio, usuario }) {
-    const [ultimoAcesso, setUltimoAcesso] = useState('')
-
-    useEffect(() => {
+    const [ultimoAcesso] = useState(() => {
         const agora = new Date()
-
-        const dataHora = agora.toLocaleString('pt-BR')
-
-        setUltimoAcesso(dataHora)
-    }, [])
+        return agora.toLocaleString('pt-BR')
+    })
 
     return (
         <main className="login">

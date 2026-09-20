@@ -3,9 +3,7 @@ import {
   Routes,
   Route,
   Navigate,
-  useNavigate,
-  useLocation,
-  useNavigationType
+  useNavigate
 } from 'react-router-dom'
 
 import './App.css'
@@ -114,8 +112,6 @@ function Login({
 
 function App() {
   const navigate = useNavigate()
-  const location = useLocation()
-  const navigationType = useNavigationType()
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -169,17 +165,24 @@ function App() {
   })
 
   useEffect(() => {
-    if (
-      location.pathname === '/login' &&
-      navigationType === 'POP' &&
-      logado &&
-      usuarioLogado
-    ) {
-      setLogado(false)
-      setUsuarioLogado(null)
-      localStorage.removeItem('usuarioLogado')
+    function verificarVoltar(event) {
+      if (
+        event.state !== null &&
+        window.location.pathname === '/login' &&
+        usuarioLogado
+      ) {
+        setLogado(false)
+        setUsuarioLogado(null)
+        localStorage.removeItem('usuarioLogado')
+      }
     }
-  }, [location.pathname, navigationType, logado, usuarioLogado])
+
+    window.addEventListener('popstate', verificarVoltar)
+
+    return () => {
+      window.removeEventListener('popstate', verificarVoltar)
+    }
+  }, [usuarioLogado])
 
   function entrar(event) {
     event.preventDefault()
@@ -262,6 +265,16 @@ function App() {
   }
 
   function alterarDadosUsuario(novoNome, novoEmail) {
+    if (
+      novoEmail === 'admin@teste.com' &&
+      usuarioLogado.tipo !== 'admin'
+    ) {
+      return {
+        sucesso: false,
+        mensagem: 'Este e-mail é reservado para o administrador.'
+      }
+    }
+
     const emailExiste = usuarios.some(
       (usuario) =>
         usuario.email === novoEmail &&
