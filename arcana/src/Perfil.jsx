@@ -3,7 +3,7 @@ import { useState } from 'react'
 function Perfil({ voltarInicio, nome, email, foto, alterarFoto }) {
 
     const [novaFoto, setNovaFoto] = useState(foto)
-    
+
     function selecionarFoto(event) {
 
         const arquivo = event.target.files[0]
@@ -20,7 +20,36 @@ function Perfil({ voltarInicio, nome, email, foto, alterarFoto }) {
         const leitor = new FileReader()
 
         leitor.onload = () => {
-            setNovaFoto(leitor.result)
+
+            const imagem = new Image()
+
+            imagem.onload = () => {
+
+                const tamanho = 300
+
+                const canvas = document.createElement('canvas')
+                canvas.width = tamanho
+                canvas.height = tamanho
+
+                const contexto = canvas.getContext('2d')
+
+                contexto.drawImage(
+                    imagem,
+                    0,
+                    0,
+                    tamanho,
+                    tamanho
+                )
+
+                const fotoReduzida = canvas.toDataURL(
+                    'image/jpeg',
+                    0.7
+                )
+
+                setNovaFoto(fotoReduzida)
+            }
+
+            imagem.src = leitor.result
         }
 
         leitor.readAsDataURL(arquivo)
@@ -46,6 +75,7 @@ function Perfil({ voltarInicio, nome, email, foto, alterarFoto }) {
 
                 <label className="botao-foto">
                     Alterar foto
+
                     <input
                         type="file"
                         accept="image/*"
@@ -62,12 +92,20 @@ function Perfil({ voltarInicio, nome, email, foto, alterarFoto }) {
                     </button>
                 )}
 
-                <p><strong>Nome:</strong> {nome}</p>
-                <p><strong>E-mail:</strong> {email}</p>
+                <p>
+                    <strong>Nome:</strong> {nome}
+                </p>
+
+                <p>
+                    <strong>E-mail:</strong> {email}
+                </p>
 
             </div>
 
-            <button className="botao-voltar" onClick={voltarInicio}>
+            <button
+                className="botao-voltar"
+                onClick={voltarInicio}
+            >
                 Voltar
             </button>
 

@@ -295,12 +295,16 @@ function App() {
         <div className="login-links">
           <a href="#" onClick={(event) => {
             event.preventDefault()
+            setEmail('')
+            setSenha('')
             setPagina('recuperacao')
           }}>
             Esqueci minha senha
           </a>
           <a href="#" onClick={(event) => {
             event.preventDefault()
+            setEmail('')
+            setSenha('')
             setPagina('cadastro')
           }}>
             Criar uma conta

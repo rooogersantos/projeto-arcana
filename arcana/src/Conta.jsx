@@ -105,7 +105,19 @@ function Conta({ voltarInicio, tipo, alterarSenhaUsuario }) {
                 </div>
             )}
 
-            <button className="botao-voltar" onClick={voltarInicio}>
+            <button
+                className="botao-voltar"
+                onClick={() => {
+                    if (alterarSenha) {
+                        setAlterarSenha(false)
+                        setSenhaAtual('')
+                        setNovaSenha('')
+                        setConfirmarSenha('')
+                    } else {
+                        voltarInicio()
+                    }
+                }}
+            >
                 Voltar
             </button>
 
